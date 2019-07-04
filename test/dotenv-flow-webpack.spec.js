@@ -75,7 +75,7 @@ describe('dotenv-flow-webpack', () => {
 
       expect(plugin.definitions)
         .to.deep.equal({
-          'process.env.DEFAULT_ENV_VAR': 'ok'
+          'process.env.DEFAULT_ENV_VAR': JSON.stringify('ok')
         });
     });
 
@@ -86,7 +86,7 @@ describe('dotenv-flow-webpack', () => {
 
       expect(plugin.definitions)
         .to.deep.equal({
-          'process.env.LOCAL_ENV_VAR': 'ok'
+          'process.env.LOCAL_ENV_VAR': JSON.stringify('ok')
         });
     });
 
@@ -102,7 +102,7 @@ describe('dotenv-flow-webpack', () => {
 
       expect(plugin.definitions)
         .to.deep.equal({
-          'process.env.DEFAULT_ENV_VAR': 'ok'
+          'process.env.DEFAULT_ENV_VAR': JSON.stringify('ok')
         });
     });
   });
@@ -121,7 +121,7 @@ describe('dotenv-flow-webpack', () => {
 
       expect(plugin.definitions)
         .to.deep.equal({
-          'process.env.DEFAULT_ENV_VAR': 'ok'
+          'process.env.DEFAULT_ENV_VAR': JSON.stringify('ok')
         });
     });
 
@@ -132,7 +132,7 @@ describe('dotenv-flow-webpack', () => {
 
       expect(plugin.definitions)
         .to.deep.equal({
-          'process.env.LOCAL_ENV_VAR': 'ok'
+          'process.env.LOCAL_ENV_VAR': JSON.stringify('ok')
         });
     });
 
@@ -143,7 +143,7 @@ describe('dotenv-flow-webpack', () => {
 
       expect(plugin.definitions)
         .to.deep.equal({
-          'process.env.DEVELOPMENT_ENV_VAR': 'ok'
+          'process.env.DEVELOPMENT_ENV_VAR': JSON.stringify('ok')
         });
     });
 
@@ -154,7 +154,7 @@ describe('dotenv-flow-webpack', () => {
 
       expect(plugin.definitions)
         .to.deep.equal({
-          'process.env.DEVELOPMENT_LOCAL_ENV_VAR': 'ok'
+          'process.env.DEVELOPMENT_LOCAL_ENV_VAR': JSON.stringify('ok')
         });
     });
   });
@@ -171,7 +171,7 @@ describe('dotenv-flow-webpack', () => {
 
       expect(plugin.definitions)
         .to.deep.equal({
-          'process.env.DEFAULT_ENV_VAR': 'ok'
+          'process.env.DEFAULT_ENV_VAR': JSON.stringify('ok')
         });
     });
 
@@ -184,7 +184,7 @@ describe('dotenv-flow-webpack', () => {
 
       expect(plugin.definitions)
         .to.deep.equal({
-          'process.env.LOCAL_ENV_VAR': 'ok'
+          'process.env.LOCAL_ENV_VAR': JSON.stringify('ok')
         });
     });
 
@@ -197,7 +197,7 @@ describe('dotenv-flow-webpack', () => {
 
       expect(plugin.definitions)
         .to.deep.equal({
-          'process.env.DEVELOPMENT_ENV_VAR': 'ok'
+          'process.env.DEVELOPMENT_ENV_VAR': JSON.stringify('ok')
         });
     });
 
@@ -210,7 +210,7 @@ describe('dotenv-flow-webpack', () => {
 
       expect(plugin.definitions)
         .to.deep.equal({
-          'process.env.DEVELOPMENT_LOCAL_ENV_VAR': 'ok'
+          'process.env.DEVELOPMENT_LOCAL_ENV_VAR': JSON.stringify('ok')
         });
     });
 
@@ -226,7 +226,7 @@ describe('dotenv-flow-webpack', () => {
 
       expect(plugin.definitions)
         .to.deep.equal({
-          'process.env.PRODUCTION_ENV_VAR': 'ok'
+          'process.env.PRODUCTION_ENV_VAR': JSON.stringify('ok')
         });
     });
   });
@@ -243,7 +243,7 @@ describe('dotenv-flow-webpack', () => {
 
       expect(plugin.definitions)
         .to.deep.equal({
-          'process.env.DEFAULT_ENV_VAR': 'ok'
+          'process.env.DEFAULT_ENV_VAR': JSON.stringify('ok')
         });
     });
 
@@ -256,7 +256,7 @@ describe('dotenv-flow-webpack', () => {
 
       expect(plugin.definitions)
         .to.deep.equal({
-          'process.env.LOCAL_ENV_VAR': 'ok'
+          'process.env.LOCAL_ENV_VAR': JSON.stringify('ok')
         });
     });
 
@@ -269,7 +269,7 @@ describe('dotenv-flow-webpack', () => {
 
       expect(plugin.definitions)
         .to.deep.equal({
-          'process.env.DEVELOPMENT_ENV_VAR': 'ok'
+          'process.env.DEVELOPMENT_ENV_VAR': JSON.stringify('ok')
         });
     });
 
@@ -282,7 +282,7 @@ describe('dotenv-flow-webpack', () => {
 
       expect(plugin.definitions)
         .to.deep.equal({
-          'process.env.DEVELOPMENT_LOCAL_ENV_VAR': 'ok'
+          'process.env.DEVELOPMENT_LOCAL_ENV_VAR': JSON.stringify('ok')
         });
     });
 
@@ -298,7 +298,7 @@ describe('dotenv-flow-webpack', () => {
 
       expect(plugin.definitions)
         .to.deep.equal({
-          'process.env.PRODUCTION_ENV_VAR': 'ok'
+          'process.env.PRODUCTION_ENV_VAR': JSON.stringify('ok')
         });
     });
   });
@@ -316,7 +316,7 @@ describe('dotenv-flow-webpack', () => {
 
       expect(plugin.definitions)
         .to.deep.equal({
-          'process.env.DEFAULT_ENV_VAR': 'ok'
+          'process.env.DEFAULT_ENV_VAR': JSON.stringify('ok')
         });
     });
   });
@@ -357,8 +357,8 @@ describe('dotenv-flow-webpack', () => {
 
         expect(plugin.definitions)
           .to.include({
-            'process.env.DEFAULT_ENV_VAR': 'ok',
-            'process.env.SYSTEM_ENV_VAR': 'ok'
+            'process.env.DEFAULT_ENV_VAR': JSON.stringify('ok'),
+            'process.env.SYSTEM_ENV_VAR': JSON.stringify('ok')
           });
       });
 
@@ -372,7 +372,8 @@ describe('dotenv-flow-webpack', () => {
         });
 
         expect(plugin.definitions)
-          .to.have.property('process.env.DEFAULT_ENV_VAR', 'predefined');
+          .to.have.property('process.env.DEFAULT_ENV_VAR')
+          .that.equals(JSON.stringify('predefined'));
       });
 
       it('warns about the system environment variable that overwrites an existing one', () => {
@@ -405,8 +406,8 @@ describe('dotenv-flow-webpack', () => {
 
         expect(plugin.definitions)
           .to.include({
-            'process.env.DEFAULT_ENV_VAR': 'ok',
-            'process.env.SYSTEM_ENV_VAR': 'ok'
+            'process.env.DEFAULT_ENV_VAR': JSON.stringify('ok'),
+            'process.env.SYSTEM_ENV_VAR': JSON.stringify('ok')
           });
       });
 
@@ -421,7 +422,8 @@ describe('dotenv-flow-webpack', () => {
         });
 
         expect(plugin.definitions)
-          .to.have.property('process.env.DEFAULT_ENV_VAR', 'predefined');
+          .to.have.property('process.env.DEFAULT_ENV_VAR')
+          .that.equals(JSON.stringify('predefined'));
       });
 
       it("doesn't print any warnings", () => {
