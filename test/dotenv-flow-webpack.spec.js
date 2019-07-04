@@ -337,33 +337,106 @@ describe('dotenv-flow-webpack', () => {
   describe('when the `system_vars` option is given', () => {
     isolateProcessEnv();
 
-    it('loads system environment variables', () => {
-      process.env.SYSTEM_ENV_VAR = 'ok';
+    let $consoleWarn;
 
-      $dotenvFiles['/path/to/project/.env'] = 'DEFAULT_ENV_VAR=ok';
-
-      const plugin = new DotenvFlow({
-        system_vars: true
-      });
-
-      expect(plugin.definitions)
-        .to.include({
-          'process.env.DEFAULT_ENV_VAR': 'ok',
-          'process.env.SYSTEM_ENV_VAR': 'ok'
-        });
+    beforeEach('stub `console.warn`', () => {
+      $consoleWarn = sinon.stub(console, 'warn');
     });
 
-    it('prioritizes system environment variables', () => {
-      process.env.DEFAULT_ENV_VAR = 'predefined';
+    afterEach(() => $consoleWarn.restore());
 
-      $dotenvFiles['/path/to/project/.env'] = 'DEFAULT_ENV_VAR="defined by `.env`"';
+    describe('when the `silent` option is not given', () => {
+      it('loads system environment variables', () => {
+        process.env.SYSTEM_ENV_VAR = 'ok';
 
-      const plugin = new DotenvFlow({
-        system_vars: true
+        $dotenvFiles['/path/to/project/.env'] = 'DEFAULT_ENV_VAR=ok';
+
+        const plugin = new DotenvFlow({
+          system_vars: true
+        });
+
+        expect(plugin.definitions)
+          .to.include({
+            'process.env.DEFAULT_ENV_VAR': 'ok',
+            'process.env.SYSTEM_ENV_VAR': 'ok'
+          });
       });
 
-      expect(plugin.definitions)
-        .to.have.property('process.env.DEFAULT_ENV_VAR', 'predefined');
+      it('prioritizes system environment variables', () => {
+        process.env.DEFAULT_ENV_VAR = 'predefined';
+
+        $dotenvFiles['/path/to/project/.env'] = 'DEFAULT_ENV_VAR="defined by `.env`"';
+
+        const plugin = new DotenvFlow({
+          system_vars: true
+        });
+
+        expect(plugin.definitions)
+          .to.have.property('process.env.DEFAULT_ENV_VAR', 'predefined');
+      });
+
+      it('warns about the system environment variable that overwrites an existing one', () => {
+        process.env.DEFAULT_ENV_VAR = 'predefined';
+
+        $dotenvFiles['/path/to/project/.env'] = 'DEFAULT_ENV_VAR="defined by `.env`"';
+
+        new DotenvFlow({
+          system_vars: true
+        });
+
+        expect($consoleWarn)
+          .to.have.been.calledWith(
+            'dotenv-flow-webpack: "%s" is overwritten by the system environment variable with the same name',
+            'DEFAULT_ENV_VAR'
+          );
+      });
+    });
+
+    describe('when the `silent` option is set to `true`', () => {
+      it('loads system environment variables', () => {
+        process.env.SYSTEM_ENV_VAR = 'ok';
+
+        $dotenvFiles['/path/to/project/.env'] = 'DEFAULT_ENV_VAR=ok';
+
+        const plugin = new DotenvFlow({
+          system_vars: true,
+          silent: true
+        });
+
+        expect(plugin.definitions)
+          .to.include({
+            'process.env.DEFAULT_ENV_VAR': 'ok',
+            'process.env.SYSTEM_ENV_VAR': 'ok'
+          });
+      });
+
+      it('prioritizes system environment variables', () => {
+        process.env.DEFAULT_ENV_VAR = 'predefined';
+
+        $dotenvFiles['/path/to/project/.env'] = 'DEFAULT_ENV_VAR="defined by `.env`"';
+
+        const plugin = new DotenvFlow({
+          system_vars: true,
+          silent: true
+        });
+
+        expect(plugin.definitions)
+          .to.have.property('process.env.DEFAULT_ENV_VAR', 'predefined');
+      });
+
+      it("doesn't print any warnings", () => {
+        process.env.DEFAULT_ENV_VAR = 'predefined';
+
+        $dotenvFiles['/path/to/project/.env'] = 'DEFAULT_ENV_VAR="defined by `.env`"';
+
+        new DotenvFlow({
+          system_vars: true,
+          silent: true
+        });
+
+        expect($consoleWarn)
+          .to.have.not.been.called;
+      });
     });
   });
 
@@ -387,7 +460,7 @@ describe('dotenv-flow-webpack', () => {
 
     afterEach(() => $consoleError.restore());
 
-    describe('by default (when the `silent` options is no given)', () => {
+    describe('by default (when the `silent` options is not given)', () => {
       it('prints the occurred error message to the console', () => {
         new DotenvFlow();
 
