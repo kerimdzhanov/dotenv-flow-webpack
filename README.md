@@ -7,7 +7,7 @@ A secure webpack plugin that gives the ability to access environment variables v
 > backed by [dotenv-flow](https://github.com/kerimdzhanov/dotenv-flow), inspired by [dotenv-webpack](https://github.com/mrsteele/dotenv-webpack) 
 
 [![npm version](https://badge.fury.io/js/dotenv-flow-webpack.svg)](https://badge.fury.io/js/dotenv-flow-webpack)
-[![Build Status](https://travis-ci.org/kerimdzhanov/dotenv-flow-webpack.svg?branch=master)](https://travis-ci.org/kerimdzhanov/dotenv-flow-webpack)
+[![Build Status](https://travis-ci.com/kerimdzhanov/dotenv-flow-webpack.svg?branch=master)](https://travis-ci.com/kerimdzhanov/dotenv-flow-webpack)
 [![dependencies status](https://david-dm.org/kerimdzhanov/dotenv-flow-webpack/status.svg)](https://david-dm.org/kerimdzhanov/dotenv-flow-webpack)
 
 
