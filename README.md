@@ -2,7 +2,7 @@
 
 <img src="https://raw.githubusercontent.com/kerimdzhanov/dotenv-flow-webpack/master/dotenv-flow-webpack@2x.png" alt="dotenv-flow-webpack" width="220" height="250" align="right" />
 
-A secure webpack plugin that gives the ability to access environment variables via `process.env.*` defined in your `.env[.development|test|production]` files within your web applications built with webpack.
+A secure webpack plugin that gives the ability to access environment variables via `process.env.*` defined in your `.env`, `.env.development`, `.env.test`, `.env.production`, etc,. files within your web applications built with webpack.
 
 Storing configuration in _environment variables_ separate from code and grouping them by environments like _development_, _test_ and _production_ is based on [The Twelve-Factor App](https://12factor.net/config) methodology.
 
