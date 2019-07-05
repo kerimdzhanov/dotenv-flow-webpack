@@ -1,6 +1,6 @@
 # dotenv-flow-webpack
 
-<img src="https://raw.githubusercontent.com/kerimdzhanov/dotenv-flow-webpack/master/dotenv-flow-webpack@2x.png" alt="dotenv-flow-webpack" width="133" height="150" align="right" />
+<img src="https://raw.githubusercontent.com/kerimdzhanov/dotenv-flow-webpack/master/dotenv-flow-webpack@2x.png" alt="dotenv-flow-webpack" width="220" height="250" align="right" />
 
 A secure webpack plugin that gives the ability to access environment variables via `process.env.*` defined in your `.env[.development|test|production]` files within your web applications built with webpack.
 
