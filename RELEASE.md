@@ -9,4 +9,6 @@
 5. Make a release commit with a message in format `chore(release): vX.Y.Z`
 6. Tag the release commit using `$ git tag vX.Y.X`
 7. Push the release commit (including the tag) to github `$ git push && git push --tags`
-8. Publish the new package version using `$ npm publish`
+8. Temporary decrease the logo size in `README.md` up to 210x230
+9. Publish the new package version using `$ npm publish`
+10. Reset the logo size to the original
