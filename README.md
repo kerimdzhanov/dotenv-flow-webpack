@@ -32,7 +32,7 @@ $ yarn add dotenv-flow-webpack --dev
 
 Technically, the plugin wraps the [`dotenv-flow` API](https://github.com/kerimdzhanov/dotenv-flow#api-reference) providing the ability to configure it in your `webpack.config.js` file(s).
 
-Also, make a note that plugin uses a **secure** strategy of replacing of the `process.env.*` code entries upon the build process, thus **it exposes only only environment variables that are used in your code**.
+Also, make a note that plugin uses a **secure** strategy of replacing of the `process.env.*` code entries upon the build process, thus **it exposes only environment variables that are used in your code**.
 
 
 ## Usage example
