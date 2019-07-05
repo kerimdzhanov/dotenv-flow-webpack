@@ -106,19 +106,16 @@ const USERS_ENDPOINT = process.env.SERVICE_URL + '/users';
 console.log('USERS_ENDPOINT:', USERS_ENDPOINT);
 ```
 
-Thus, when you build your app with `NODE_ENV=development`, the resulting bundle will contain:
+Thus, when you build your app with `NODE_ENV=development`, the resulting bundle will include something like this:
 
 ```js
 // file1.js
 
-if ('development' !== 'production') {
-  console.log(`Running in the "${'development'}" mode.`);
-}
-else {
-  console.log('We are in production!');
-}
+if (true) {
+  console.log("Running in the ".concat("development", " mode."));
+} else {}
 
-const USERS_ENDPOINT = 'http://localhost:3000/api/v1' + '/users';
+const USERS_ENDPOINT = "http://localhost:3000/api/v1" + '/users';
 
 console.log('USERS_ENDPOINT:', USERS_ENDPOINT);
 ```
@@ -128,23 +125,20 @@ Or if you build your app with `NODE_ENV=production`, then the output will look l
 ```js
 // file1.js
 
-if ('production' !== 'production') {
-  console.log(`Running in the "${'production'}" mode.`); // >>
-}
-else {
-  console.log('We are in production!'); // >>>
+if (false) {} else {
+  console.log('We are in production!');
 }
 
-const USERS_ENDPOINT = 'https://myapp.com/api/v1' + '/users';
+const USERS_ENDPOINT = "https://myapp.com/api/v1" + '/users';
 
 console.log('USERS_ENDPOINT:', USERS_ENDPOINT);
 ```
 
-And after all the tree-shaking/optimization processes it will be cut down till:
+And after all the optimization procedures it will be compressed till:
 
 ```js
-console.log('We are in production!');
-console.log('USERS_ENDPOINT:', 'https://myapp.com/api/v1/users');
+console.log("We are in production!");
+console.log("USERS_ENDPOINT:", "https://myapp.com/api/v1/users");
 ```
 
 Make a note that values of `DATABASE_(HOST/PORT/USER/PASSWORD/NAME)` will **not** be present in the resulting bundle while they are not referenced anywhere in the code.
@@ -162,9 +156,13 @@ By default, the plugin refers the `NODE_ENV` environment variable to detect the 
 With the `node_env` option you can force the module to use your custom environment value independent of `process.env.NODE_ENV`.
 
 ```js
-new DotenvFlow({
-  node_env: process.argv[2] || 'development'
-})
+module.exports = (env, argv) => {
+  // ...
+  config.plugins.push(new DotenvFlow({
+    node_env: env.production ? 'production' : 'development'
+  }));
+  // ...
+};
 ```
 
 ##### `options.default_node_env`
