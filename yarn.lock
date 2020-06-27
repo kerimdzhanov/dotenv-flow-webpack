@@ -1140,10 +1140,10 @@ dot-prop@^3.0.0:
   dependencies:
     is-obj "^1.0.0"
 
-dotenv-flow@^3.0.0-rc.1:
-  version "3.0.0-rc.1"
-  resolved "https://registry.yarnpkg.com/dotenv-flow/-/dotenv-flow-3.0.0-rc.1.tgz#35b6ea5becf24b13d224f61936754bff596cd14b"
-  integrity sha512-ezSFAuL7SYjZmc2+wxZ/jOknkOo2hskv4qk+U/+Ix+a//2MkaAdVO7l5T20NvsLclLS2mFw/9flcjE9JqEvT+g==
+dotenv-flow@^3.2.0:
+  version "3.2.0"
+  resolved "https://registry.yarnpkg.com/dotenv-flow/-/dotenv-flow-3.2.0.tgz#a5d79dd60ddb6843d457a4874aaf122cf659a8b7"
+  integrity sha512-GEB6RrR4AbqDJvNSFrYHqZ33IKKbzkvLYiD5eo4+9aFXr4Y4G+QaFrB/fNp0y6McWBmvaPn3ZNjIufnj8irCtg==
   dependencies:
     dotenv "^8.0.0"
 
