@@ -6,7 +6,7 @@ A secure webpack plugin that gives the ability to access environment variables v
 
 Storing configuration in _environment variables_ separate from code and grouping them by environments like _development_, _test_ and _production_ is based on [The Twelve-Factor App](https://12factor.net/config) methodology.
 
-> backed by [dotenv-flow](https://github.com/kerimdzhanov/dotenv-flow), inspired by [dotenv-webpack](https://github.com/mrsteele/dotenv-webpack) 
+> backed by [dotenv-flow](https://github.com/kerimdzhanov/dotenv-flow), inspired by [dotenv-webpack](https://github.com/mrsteele/dotenv-webpack)
 
 [![npm version](https://badge.fury.io/js/dotenv-flow-webpack.svg)](https://badge.fury.io/js/dotenv-flow-webpack)
 [![Build Status](https://travis-ci.com/kerimdzhanov/dotenv-flow-webpack.svg?branch=master)](https://travis-ci.com/kerimdzhanov/dotenv-flow-webpack)
@@ -32,7 +32,7 @@ $ yarn add dotenv-flow-webpack --dev
 
 Technically, the plugin wraps the [`dotenv-flow` API](https://github.com/kerimdzhanov/dotenv-flow#api-reference) providing the ability to configure it in your `webpack.config.js` file(s).
 
-Also, make a note that plugin uses a **secure** strategy of replacing of the `process.env.*` code entries upon the build process, thus **it exposes only environment variables that are used in your code**.
+Note that plugin uses a **secure** strategy of replacing of the `process.env.*` code entries upon the build process, thus **it exposes only environment variables that are used in your code**.
 
 
 ## Usage example
@@ -228,7 +228,7 @@ Set to `true` to suppress all errors and warnings.
 
 Please refer the [dotenv-flow documentation](https://github.com/kerimdzhanov/dotenv-flow#readme) to learn more about the `.env*` files concept.
 
-Here is the list of available sections:
+Here is the list of related sections:
 
  * [`NODE_ENV`-specific `.env*` files](https://github.com/kerimdzhanov/dotenv-flow#node_env-specific-env-files)
  * [Files under version control](https://github.com/kerimdzhanov/dotenv-flow#files-under-version-control)
@@ -257,4 +257,4 @@ $ yarn test
 
 ## License
 
-Licensed under [MIT](LICENSE) © 2019 Dan Kerimdzhanov
+Licensed under [MIT](LICENSE) © 2019-2020 Dan Kerimdzhanov
