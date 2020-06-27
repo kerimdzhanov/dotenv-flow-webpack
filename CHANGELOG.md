@@ -1,3 +1,12 @@
+# [1.1.0](https://github.com/kerimdzhanov/dotenv-flow-webpack/compare/v1.0.0...v1.1.0) (2020-06-27)
+
+
+### Features
+
+* **dotenv-flow:** update `dotenv-flow` up to `v3.2.0` ([67215cf](https://github.com/kerimdzhanov/dotenv-flow-webpack/commit/67215cf))
+
+
+
 # [1.0.0](https://github.com/kerimdzhanov/dotenv-flow-webpack/compare/v1.0.0-rc.2...v1.0.0) (2019-07-05)
 
 
