@@ -23,7 +23,7 @@
   "main": "lib/dotenv-flow-webpack.js",
   "files": [],
   "peerDependencies": {
-    "webpack": "^1 || ^2 || ^3 || ^4"
+    "webpack": "^1 || ^2 || ^3 || ^4 || ^5"
   },
   "dependencies": {
     "dotenv-flow": "^3.2.0"
