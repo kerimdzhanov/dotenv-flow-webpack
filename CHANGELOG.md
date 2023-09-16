@@ -1,3 +1,13 @@
+# [1.2.0-rc.1](https://github.com/kerimdzhanov/dotenv-flow-webpack/compare/v1.1.0...v1.2.0-rc.1) (2023-09-16)
+
+
+### Features
+
+* **dotenv-flow:** update dotenv-flow to v3.3.0 ([dc33a8c](https://github.com/kerimdzhanov/dotenv-flow-webpack/commit/dc33a8c))
+* **webpack:** support webpack@5 as peer dependency ([#11](https://github.com/kerimdzhanov/dotenv-flow-webpack/issues/11)), closes [#15](https://github.com/kerimdzhanov/dotenv-flow-webpack/issues/15) ([6a35ec5](https://github.com/kerimdzhanov/dotenv-flow-webpack/commit/6a35ec5))
+
+
+
 # [1.1.0](https://github.com/kerimdzhanov/dotenv-flow-webpack/compare/v1.0.0...v1.1.0) (2020-06-27)
 
 
