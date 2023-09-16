@@ -8,10 +8,9 @@ Storing configuration in _environment variables_ separate from code and grouping
 
 > backed by [dotenv-flow](https://github.com/kerimdzhanov/dotenv-flow), inspired by [dotenv-webpack](https://github.com/mrsteele/dotenv-webpack)
 
+[![Build Status](https://github.com/kerimdzhanov/dotenv-flow-webpack/actions/workflows/ci.yml/badge.svg?branch=master&event=push)](https://github.com/kerimdzhanov/dotenv-flow-webpack/actions/workflows/ci.yml)
 [![npm version](https://badge.fury.io/js/dotenv-flow-webpack.svg)](https://badge.fury.io/js/dotenv-flow-webpack)
-[![Build Status](https://travis-ci.com/kerimdzhanov/dotenv-flow-webpack.svg?branch=master)](https://travis-ci.com/kerimdzhanov/dotenv-flow-webpack)
-[![dependencies status](https://david-dm.org/kerimdzhanov/dotenv-flow-webpack/status.svg)](https://david-dm.org/kerimdzhanov/dotenv-flow-webpack)
-
+[![Known Vulnerabilities](https://snyk.io/test/github/kerimdzhanov/dotenv-flow-webpack/badge.svg?targetFile=package.json)](https://snyk.io/test/github/kerimdzhanov/dotenv-flow-webpack?targetFile=package.json)
 
 ## Installation
 
