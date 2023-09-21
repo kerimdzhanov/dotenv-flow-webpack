@@ -256,4 +256,4 @@ $ yarn test
 
 ## License
 
-Licensed under [MIT](LICENSE) © 2019-2020 Dan Kerimdzhanov
+Licensed under [MIT](LICENSE) © 2019-2023 Dan Kerimdzhanov
