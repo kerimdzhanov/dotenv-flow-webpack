@@ -2,11 +2,12 @@
 
 <img src="https://raw.githubusercontent.com/kerimdzhanov/dotenv-flow-webpack/master/dotenv-flow-webpack@2x.png" alt="dotenv-flow-webpack" width="220" height="250" align="right" />
 
-A secure webpack plugin that gives the ability to access environment variables via `process.env.*` defined in your `.env`, `.env.development`, `.env.test`, `.env.production`, etc,. files within your web applications built with webpack.
+A secure webpack plugin that replaces all the accesses to `process.env.<ENVIRONMENT_VARIABLE>` with the appropriate values from your `.env*` files using _[dotenv-flow](https://github.com/kerimdzhanov/dotenv-flow)_.
 
-Storing configuration in _environment variables_ separate from code and grouping them by environments like _development_, _test_ and _production_ is based on [The Twelve-Factor App](https://12factor.net/config) methodology.
+> _dotenv-flow_ extends _[dotenv](https://github.com/motdotla/dotenv)_, adding support of `NODE_ENV`-specific `.env*` files _like `.env.development`, `.env.test`, `.env.stage`, and `.env.production`,_ and the appropriate `.env*.local` overrides.
 
-> backed by [dotenv-flow](https://github.com/kerimdzhanov/dotenv-flow), inspired by [dotenv-webpack](https://github.com/mrsteele/dotenv-webpack)
+🌱 Inspired by _[dotenv-webpack](https://github.com/mrsteele/dotenv-webpack)_, _[CreateReactApp](https://create-react-app.dev/)'s **storing configs in `.env*` files** approach_,
+the _Twelve-Factor App methodology_ in general, and _its **[store config in the environment](https://12factor.net/config)** section_ in particular.
 
 [![Build Status](https://github.com/kerimdzhanov/dotenv-flow-webpack/actions/workflows/ci.yml/badge.svg?branch=master&event=push)](https://github.com/kerimdzhanov/dotenv-flow-webpack/actions/workflows/ci.yml)
 [![npm version](https://badge.fury.io/js/dotenv-flow-webpack.svg)](https://badge.fury.io/js/dotenv-flow-webpack)
