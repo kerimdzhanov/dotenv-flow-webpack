@@ -13,3 +13,5 @@
 8. Publish the new package version using `$ yarn publish [--tag=next]`
 9. Reset the logo size back to original
 10. Create a new version release On GitHub
+11. When releasing a stable (`@latest`) version, remove the `@next` tag from
+    the current release candidate using `$ yarn tag rm dotenv-flow-webpack next`
