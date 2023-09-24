@@ -1,7 +1,7 @@
 {
   "name": "dotenv-flow-webpack",
   "version": "1.2.0",
-  "description": "A secure webpack plugin that gives the ability to access environment variables via `process.env.*` defined in your `.env[.development|test|production]` files within your web applications built with webpack.",
+  "description": "A webpack plugin that allows you to securely use environment variables within your javascript web application, loading them using dotenv-flow's `.env*` files loading strategy.",
   "keywords": [
     "dotenv-flow",
     "webpack",
@@ -29,7 +29,7 @@
     "webpack": "^1 || ^2 || ^3 || ^4 || ^5"
   },
   "dependencies": {
-    "dotenv-flow": "^3.3.0"
+    "dotenv-flow": "^4.0.0-rc.2"
   },
   "devDependencies": {
     "@types/sinon-chai": "^3.2.9",
