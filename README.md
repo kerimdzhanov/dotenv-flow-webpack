@@ -93,11 +93,59 @@ With the `path` initialization option you can specify a path to `.env*` files di
 
 ```js
 new DotenvFlow({
-  path: '/path/to/env-files-dir'
+  path: './config'
 })
 ```
 
-If the option is not provided, the current working directory will be used.
+If the option is not provided, the current working directory is used.
+
+#### `pattern`
+###### Type: `string`
+###### Default: `'.env[.node_env][.local]'`
+
+Allows you to change the default `.env*` files' naming convention
+if you want to have a specific file naming structure for maintaining
+your environment variables' files.
+
+**Default Value**
+
+The default value `".env[.node_env][.local]"` makes *dotenv-flow-webpack*
+look up and load the following files in order:
+
+1. `.env`
+2. `.env.local`
+3. `.env.${NODE_ENV}`
+4. `.env.${NODE_ENV}.local`
+
+For example, when the `proess.env.NODE_ENV` (or `options.node_env`) is set to `"development"`,
+*dotenv-flow-webpack* will be looking for and parsing (if found) the following files:
+
+1. `.env`
+2. `.env.local`
+3. `.env.development`
+4. `.env.development.local`
+
+**Custom Pattern**
+
+Here is a couple of examples of customizing the `.env*` files naming convention:
+
+For example, if you set the pattern to `".env/[local/]env[.node_env]"`,
+*dotenv-flow-webpack* will look for these files instead:
+
+1. `.env/env`
+2. `.env/local/env`
+3. `.env/env.development`
+4. `.env/local/env.development`
+
+… or if you set the pattern to `".env/[.node_env/].env[.node_env][.local]"`,
+the plugin will try to find and parse:
+
+1. `.env/.env`
+2. `.env/.env.local`
+3. `.env/development/.env.development`
+4. `.env/development/.env.development.local`
+
+› Please refer to [`dotenv-flow.listFiles(options)`](https://github.com/kerimdzhanov/dotenv-flow#listfilesoptions--string) to learn more.
 
 #### `encoding`
 ###### Type: `string`
