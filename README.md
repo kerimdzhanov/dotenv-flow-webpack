@@ -59,26 +59,20 @@ module.exports = {
 
 ## Configuration options
 
-As a wrapper of [dotenv-flow](https://github.com/kerimdzhanov/dotenv-flow), **dotenv-flow-webpack** has the same configuration options extending them with its own described below.
-
-##### `options.node_env`
+#### `node_env`
 ###### Type: `string`
-###### Default: `process.env.NODE_ENV`
+###### Default: `process.env.NODE_ENV || options.default_node_env`
 
 By default, the plugin refers the `NODE_ENV` environment variable to detect the environment to use.
 With the `node_env` option you can force the module to use your custom environment value independent of `process.env.NODE_ENV`.
 
 ```js
-module.exports = (env, argv) => {
-  // ...
-  config.plugins.push(new DotenvFlow({
-    node_env: env.production ? 'production' : 'development'
-  }));
-  // ...
-};
+new DotenvFlow({
+  node_env: 'production'
+})
 ```
 
-##### `options.default_node_env`
+#### `default_node_env`
 ###### Type: `string`
 ###### Default: _undefined_
 
@@ -91,7 +85,7 @@ new DotenvFlow({
 })
 ```
 
-##### `options.path`
+#### `path`
 ###### Type: `string`
 ###### Default: `process.cwd()` _(current working directory)_
 
@@ -105,7 +99,7 @@ new DotenvFlow({
 
 If the option is not provided, the current working directory will be used.
 
-##### `options.encoding`
+#### `encoding`
 ###### Type: `string`
 ###### Default: `'utf8'`
 
@@ -117,7 +111,7 @@ new DotenvFlow({
 })
 ```
 
-##### `options.system_vars`
+#### `system_vars`
 ###### Type: `boolean`
 ###### Default: `false`
 
@@ -130,13 +124,19 @@ new DotenvFlow({
 })
 ```
 
-##### `options.silent`
+#### `silent`
 ###### Type: `boolean`
 ###### Default: `false`
 
-Set to `true` to suppress all errors and warnings.
+Set to `true` to suppress all kinds of errors and warnings.
 
-### Example Project
+```js
+new DotenvFlow({
+  silent: true
+})
+```
+
+## Project Example
 
 Let's suppose you have the following files in your project:
 
