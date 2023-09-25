@@ -344,6 +344,35 @@ describe('dotenv-flow-webpack', () => {
     });
   });
 
+  describe('when `options.pattern` is given', () => {
+    let options;
+
+    beforeEach('setup `options.pattern`', () => {
+      options = { pattern: '.env/[local/]env[.node_env]' };
+    });
+
+    it('reads files by the given `.env*` files naming convention', () => {
+      mockFS({
+        '/path/to/project/.env/env': 'DEFAULT_ENV_VAR=ok',
+        '/path/to/project/.env/env.development': 'DEVELOPMENT_ENV_VAR=ok',
+        '/path/to/project/.env/local/env': 'LOCAL_ENV_VAR=ok',
+        '/path/to/project/.env/local/env.development': 'LOCAL_DEVELOPMENT_ENV_VAR=ok'
+      });
+
+      process.env.NODE_ENV = 'development';
+
+      const plugin = new DotenvFlow(options);
+
+      expect(plugin.definitions)
+        .to.deep.equal({
+          'process.env.DEFAULT_ENV_VAR': JSON.stringify('ok'),
+          'process.env.LOCAL_ENV_VAR': JSON.stringify('ok'),
+          'process.env.DEVELOPMENT_ENV_VAR': JSON.stringify('ok'),
+          'process.env.LOCAL_DEVELOPMENT_ENV_VAR': JSON.stringify('ok')
+        });
+    });
+  });
+
   describe('when `options.encoding` is given', () => {
     let options;
 
