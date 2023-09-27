@@ -87,6 +87,10 @@ describe('dotenv-flow-webpack', () => {
   // --
 
   it('is an instance of `webpack.DefinePlugin`', () => {
+    mockFS({
+      '/path/to/project/.env': 'DEFAULT_ENV_VAR=ok'
+    });
+
     expect(new DotenvFlow()).is.an.instanceOf(DefinePlugin);
   });
 
@@ -888,6 +892,151 @@ describe('dotenv-flow-webpack', () => {
     it('throws the occurred error', () => {
       expect(() => new DotenvFlow())
         .to.throw('`.env.local` file reading error stub');
+    });
+  });
+
+  describe('when none of the appropriate ".env*" files is present', () => {
+    beforeEach('stub `console.warn`', () => {
+      sinon.stub(console, 'warn');
+    });
+
+    afterEach('restore `console.warn`', () => {
+      console.warn.restore();
+    });
+
+    describe('… and no "node_env-related" options are set', () => {
+      it('warns about the "no `.env*` files" error', () => {
+        new DotenvFlow();
+
+        expect(console.warn)
+          .to.have.been.calledWithMatch(
+            /dotenv-flow-webpack\b.*`\.env\*` files loading failed/,
+            /no "\.env\*" files.*found/
+          );
+      });
+
+      describe('the printed warning message', () => {
+        it('indicates the working directory', () => {
+          new DotenvFlow();
+
+          expect(console.warn)
+            .to.have.been.calledWithMatch(
+              /dotenv-flow-webpack\b.*`\.env\*` files loading failed/,
+              '"/path/to/project"'
+            );
+
+          new DotenvFlow({
+            path: '/path/to/another/project'
+          });
+
+          expect(console.warn)
+            .to.have.been.calledWithMatch(
+              /dotenv-flow-webpack\b.*`\.env\*` files loading failed/,
+              '"/path/to/another/project"'
+            );
+        });
+
+        it('indicates the naming convention pattern', () => {
+          new DotenvFlow();
+
+          expect(console.warn)
+            .to.have.been.calledWithMatch(
+              /dotenv-flow-webpack\b.*`\.env\*` files loading failed/,
+              `".env[.node_env][.local]"`
+            );
+
+          new DotenvFlow({
+            pattern: 'config/[local/].env[.node_env]'
+          });
+
+          expect(console.warn)
+            .to.have.been.calledWithMatch(
+              /dotenv-flow-webpack\b.*`\.env\*` files loading failed/,
+              '"config/[local/].env[.node_env]"'
+            );
+        });
+      });
+    });
+
+    describe('… and the `NODE_ENV` environment variable is present', () => {
+      beforeEach('setup `process.env.NODE_ENV`', () => {
+        process.env.NODE_ENV = 'development';
+      });
+
+      it('warns about the "no `.env*` files" error', () => {
+        new DotenvFlow();
+
+        expect(console.warn)
+          .to.have.been.calledWithMatch(
+            /dotenv-flow-webpack\b.*`\.env\*` files loading failed/,
+            /no "\.env\*" files.*found/
+          );
+      });
+
+      describe('the printed warning message', () => {
+        it('indicates the working directory', () => {
+          new DotenvFlow();
+
+          expect(console.warn)
+            .to.have.been.calledWithMatch(
+              /dotenv-flow-webpack\b.*`\.env\*` files loading failed/,
+              '"/path/to/project"'
+            );
+
+          new DotenvFlow({
+            path: '/path/to/another/project'
+          });
+
+          expect(console.warn)
+            .to.have.been.calledWithMatch(
+              /dotenv-flow-webpack\b.*`\.env\*` files loading failed/,
+              '"/path/to/another/project"'
+            );
+        });
+
+        it('indicates the naming convention pattern for the specified node_env', () => {
+          new DotenvFlow();
+
+          expect(console.warn)
+            .to.have.been.calledWithMatch(
+              /dotenv-flow-webpack\b.*`\.env\*` files loading failed/,
+              `".env[.development][.local]"`
+            );
+
+          new DotenvFlow({
+            pattern: 'config/[local/].env[.node_env]'
+          });
+
+          expect(console.warn)
+            .to.have.been.calledWithMatch(
+              /dotenv-flow-webpack\b.*`\.env\*` files loading failed/,
+              `"config/[local/].env[.development]"`
+            );
+        });
+      });
+    });
+  });
+
+  describe('when `options.silent` is enabled', () => {
+    let options;
+
+    beforeEach('setup `options.silent`', () => {
+      options = { silent: true };
+    });
+
+    beforeEach('stub `console.warn`', () => {
+      sinon.stub(console, 'warn');
+    });
+
+    afterEach('restore `console.warn`', () => {
+      console.warn.restore();
+    });
+
+    it("doesn't warn about missing `.env*` files", () => {
+      new DotenvFlow(options);
+
+      expect(console.warn)
+        .to.have.not.been.called;
     });
   });
 });
