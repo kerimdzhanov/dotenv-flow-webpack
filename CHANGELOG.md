@@ -1,3 +1,7 @@
+# [2.0.0-rc.2](https://github.com/kerimdzhanov/dotenv-flow-webpack/compare/v2.0.0-rc.1...v2.0.0-rc.2) (2023-09-27)
+
+
+
 # [2.0.0-rc.1](https://github.com/kerimdzhanov/dotenv-flow-webpack/compare/v1.2.0...v2.0.0-rc.1) (2023-09-27)
 
 

@@ -1,6 +1,6 @@
 {
   "name": "dotenv-flow-webpack",
-  "version": "2.0.0-rc.1",
+  "version": "2.0.0-rc.2",
   "description": "A webpack plugin that allows you to securely use environment variables within your javascript web application, loading them using dotenv-flow's `.env*` files loading strategy.",
   "keywords": [
     "dotenv-flow",
