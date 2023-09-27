@@ -172,6 +172,18 @@ new DotenvFlow({
 })
 ```
 
+#### `options.debug`
+###### Type: `boolean`
+###### Default: `false`
+
+Enables detailed logging to debug why certain variables are not being set as you expect.
+
+```js
+new DotenvFlow({
+  debug: true
+})
+```
+
 #### `silent`
 ###### Type: `boolean`
 ###### Default: `false`

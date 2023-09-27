@@ -403,14 +403,6 @@ describe('dotenv-flow-webpack', () => {
       options = { system_vars: true };
     });
 
-    let $consoleWarn;
-
-    beforeEach('stub `console.warn`', () => {
-      $consoleWarn = sinon.stub(console, 'warn');
-    });
-
-    afterEach(() => $consoleWarn.restore());
-
     it('loads system environment variables', () => {
       process.env.SYSTEM_ENV_VAR = 'ok';
 
@@ -445,41 +437,436 @@ describe('dotenv-flow-webpack', () => {
           'process.env.LOCAL_ENV_VAR': JSON.stringify('defined in `.env.local`')
         });
     });
+  });
 
-    it('warns when a system environment variable overwrites a defined one', () => {
-      process.env.DEFAULT_ENV_VAR = 'predefined by the shell';
+  describe('when `options.debug` is enabled', () => {
+    let options;
 
+    beforeEach('setup `options.debug`', () => {
+      options = {
+        debug: true
+      };
+    });
+
+    beforeEach('stub `console.debug`', () => {
+      sinon.stub(console, 'debug');
+    });
+
+    afterEach('restore `console.debug`', () => {
+      console.debug.restore();
+    });
+
+    beforeEach("stub `.env*` files' contents", () => {
       mockFS({
-        '/path/to/project/.env': 'DEFAULT_ENV_VAR="defined in `.env`"',
-        '/path/to/project/.env.local': 'LOCAL_ENV_VAR="defined in `.env.local`"'
+        '/path/to/project/.env': 'DEFAULT_ENV_VAR=ok',
+        '/path/to/project/.env.local': 'LOCAL_ENV_VAR=ok'
       });
+    });
 
+    it('prints out initialization options [0]', () => {
       new DotenvFlow(options);
 
-      expect($consoleWarn)
-        .to.have.been.calledWith(
-          'dotenv-flow-webpack: "%s" is overwritten by the system environment variable with the same name',
-          'DEFAULT_ENV_VAR'
+      expect(console.debug)
+        .to.have.been.calledWithMatch(/dotenv-flow-webpack\b.*init/);
+
+      expect(console.debug)
+        .to.have.not.been.calledWithMatch(/dotenv-flow-webpack\b.*options\./);
+    });
+
+    it('prints out initialization options [1]', () => {
+      new DotenvFlow({
+        ...options,
+        node_env: 'development'
+      });
+
+      expect(console.debug)
+        .to.have.been.calledWithMatch(/dotenv-flow-webpack\b.*init/);
+
+      expect(console.debug)
+        .to.have.been.calledWithMatch('options.node_env', 'development');
+    });
+
+    it('prints out initialization options [2]', () => {
+      new DotenvFlow({
+        ...options,
+        node_env: 'production',
+        default_node_env: 'development'
+      });
+
+      expect(console.debug)
+        .to.have.been.calledWithMatch(/dotenv-flow-webpack\b.*init/);
+
+      expect(console.debug)
+        .to.have.been.calledWithMatch('options.node_env', 'production');
+
+      expect(console.debug)
+        .to.have.been.calledWithMatch('options.default_node_env', 'development');
+    });
+
+    it('prints out initialization options [3]', () => {
+      process.env.NODE_ENV = 'test';
+
+      new DotenvFlow({
+        ...options,
+        node_env: 'production',
+        default_node_env: 'development',
+        path: '/path/to/project',
+        pattern: '.env[.node_env][.local]',
+        encoding: 'utf8',
+        system_vars: false,
+        silent: false
+      });
+
+      expect(console.debug)
+        .to.have.been.calledWithMatch(/dotenv-flow-webpack\b.*init/);
+
+      expect(console.debug)
+        .to.have.been.calledWithMatch('options.node_env', 'production');
+
+      expect(console.debug)
+        .to.have.been.calledWithMatch('options.default_node_env', 'development');
+
+      expect(console.debug)
+        .to.have.been.calledWithMatch('options.path', '/path/to/project');
+
+      expect(console.debug)
+        .to.have.been.calledWithMatch('options.pattern', '.env[.node_env][.local]');
+
+      expect(console.debug)
+        .to.have.been.calledWithMatch('options.encoding', 'utf8');
+
+      expect(console.debug)
+        .to.have.been.calledWithMatch('options.system_vars', false);
+
+      expect(console.debug)
+        .to.have.been.calledWithMatch('options.silent', false);
+    });
+
+    it('prints out effective node_env set by `options.node_env`', () => {
+      new DotenvFlow({
+        ...options,
+        node_env: 'production'
+      });
+
+      expect(console.debug)
+        .to.have.been.calledWithMatch(
+          /dotenv-flow-webpack\b.*building for "production" environment.*`options\.node_env`/
         );
     });
 
-    describe('… and `options.silent` is enabled', () => {
-      beforeEach(() => {
-        options.silent = true;
+    it('prints out effective node_env set by `process.env.NODE_ENV`', () => {
+      process.env.NODE_ENV = 'test';
+
+      new DotenvFlow(options);
+
+      expect(console.debug)
+        .to.have.been.calledWithMatch(
+          /dotenv-flow-webpack\b.*building for "test" environment.*`process\.env\.NODE_ENV`/
+        );
+    });
+
+    it('prints out effective node_env taken from `options.default_node_env`', () => {
+      new DotenvFlow({
+        ...options,
+        default_node_env: 'development'
+      });
+
+      expect(console.debug)
+        .to.have.been.calledWithMatch(
+          /dotenv-flow-webpack\b.*building for "development" environment.*`options\.default_node_env`/
+        );
+    });
+
+    it('notifies about building in "no environment" mode when none of the related options is set', () => {
+      new DotenvFlow(options);
+
+      expect(console.debug)
+        .to.have.been.calledWithMatch(
+          /dotenv-flow-webpack\b.*building in "no environment" mode/
+        );
+    });
+
+    it('prints out the list of effective `.env*` files (by proxying the `options.debug` to `dotenv-flow.listFiles()`)', () => {
+      mockFS({
+        '/path/to/project/.env': 'DEFAULT_ENV_VAR=ok',
+        '/path/to/project/.env.local': 'LOCAL_ENV_VAR=ok',
+        '/path/to/project/.env.development': 'DEVELOPMENT_ENV_VAR=ok',
+        '/path/to/project/.env.development.local': 'LOCAL_DEVELOPMENT_ENV_VAR=ok'
+      });
+
+      new DotenvFlow({
+        ...options,
+        node_env: 'development'
+      });
+
+      expect(console.debug)
+        .to.have.been.calledWithMatch(
+          /dotenv-flow\b.*>> %s/,
+          /^\/path\/to\/project\/\.env$/
+        );
+
+      expect(console.debug)
+        .to.have.been.calledWithMatch(
+          /dotenv-flow\b.*>> %s/,
+          /^\/path\/to\/project\/\.env\.local$/
+        );
+
+      expect(console.debug)
+        .to.have.been.calledWithMatch(
+          /dotenv-flow\b.*>> %s/,
+          /^\/path\/to\/project\/\.env\.development$/
+        );
+
+      expect(console.debug)
+        .to.have.been.calledWithMatch(
+          /dotenv-flow\b.*>> %s/,
+          /^\/path\/to\/project\/\.env\.development\.local$/
+        );
+    });
+
+    it('prints out parsing files (by proxying the `options.debug` to `dotenv-flow.parse()`)', () => {
+      mockFS({
+        '/path/to/project/.env': 'DEFAULT_ENV_VAR=ok',
+        '/path/to/project/.env.local': 'LOCAL_ENV_VAR=ok',
+        '/path/to/project/.env.development': 'DEVELOPMENT_ENV_VAR=ok',
+        '/path/to/project/.env.development.local': 'LOCAL_DEVELOPMENT_ENV_VAR=ok'
+      });
+
+      new DotenvFlow({
+        ...options,
+        node_env: 'development'
+      });
+
+      expect(console.debug)
+        .to.have.been.calledWithMatch(
+          /dotenv-flow\b.*parsing.*%s/,
+          /^\/path\/to\/project\/\.env$/
+        );
+
+      expect(console.debug)
+        .to.have.been.calledWithMatch(
+          /dotenv-flow\b.*parsing.*%s/,
+          /^\/path\/to\/project\/\.env\.local$/
+        );
+
+      expect(console.debug)
+        .to.have.been.calledWithMatch(
+          /dotenv-flow\b.*parsing.*%s/,
+          /^\/path\/to\/project\/\.env\.development$/
+        );
+
+      expect(console.debug)
+        .to.have.been.calledWithMatch(
+          /dotenv-flow\b.*parsing.*%s/,
+          /^\/path\/to\/project\/\.env\.development\.local$/
+        );
+    });
+
+    it('prints out parsed environment variables (by proxying the `options.debug` to `dotenv-flow.parse()`)', () => {
+      mockFS({
+        '/path/to/project/.env': 'DEFAULT_ENV_VAR=ok',
+        '/path/to/project/.env.local': 'LOCAL_ENV_VAR=ok',
+        '/path/to/project/.env.development': 'DEVELOPMENT_ENV_VAR=ok',
+        '/path/to/project/.env.development.local': 'LOCAL_DEVELOPMENT_ENV_VAR=ok'
+      });
+
+      new DotenvFlow({
+        ...options,
+        node_env: 'development'
+      });
+
+      expect(console.debug)
+        .to.have.been.calledWithMatch(
+          /dotenv-flow\b.*>> %s/,
+          'DEFAULT_ENV_VAR'
+        );
+
+      expect(console.debug)
+        .to.have.been.calledWithMatch(
+          /dotenv-flow\b.*> %s/,
+          'LOCAL_ENV_VAR'
+        );
+
+      expect(console.debug)
+        .to.have.been.calledWithMatch(
+          /dotenv-flow\b.*> %s/,
+          'DEVELOPMENT_ENV_VAR'
+        );
+
+      expect(console.debug)
+        .to.have.been.calledWithMatch(
+          /dotenv-flow\b.*> %s/,
+          'LOCAL_DEVELOPMENT_ENV_VAR'
+        );
+    });
+
+    it('informs when merging with overwrites (by proxying the `options.debug` to `dotenv-flow.parse()`)', () => {
+      mockFS({
+        '/path/to/project/.env': (
+          'DEFAULT_ENV_VAR=ok\n' +
+          'SHARED_ENV_VAR=1'
+        ),
+        '/path/to/project/.env.local': (
+          'LOCAL_ENV_VAR=ok\n' +
+          'SHARED_ENV_VAR=2'
+        ),
+        '/path/to/project/.env.development': (
+          'DEVELOPMENT_ENV_VAR=ok\n' +
+          'SHARED_ENV_VAR=3'
+        ),
+        '/path/to/project/.env.development.local': (
+          'LOCAL_DEVELOPMENT_ENV_VAR=ok\n' +
+          'SHARED_ENV_VAR=4'
+        )
+      });
+
+      new DotenvFlow({
+        ...options,
+        node_env: 'development'
+      });
+
+      expect(console.debug)
+        .to.have.been.calledWithMatch(
+          /dotenv-flow\b.*%s.*overwritten by.*%s/,
+          'SHARED_ENV_VAR',
+          /^\/path\/to\/project\/\.env\.local$/
+        );
+
+      expect(console.debug)
+        .to.have.been.calledWithMatch(
+          /dotenv-flow\b.*%s.*overwritten by.*%s/,
+          'SHARED_ENV_VAR',
+          /^\/path\/to\/project\/\.env\.development$/
+        );
+
+      expect(console.debug)
+        .to.have.been.calledWithMatch(
+          /dotenv-flow\b.*%s.*overwritten by.*%s/,
+          'SHARED_ENV_VAR',
+          /^\/path\/to\/project\/\.env\.development\.local$/
+        );
+    });
+
+    it("prints out registered environment variables' definitions", () => {
+      mockFS({
+        '/path/to/project/.env': 'DEFAULT_ENV_VAR=ok',
+        '/path/to/project/.env.local': 'LOCAL_ENV_VAR=ok',
+        '/path/to/project/.env.development': 'DEVELOPMENT_ENV_VAR=ok',
+        '/path/to/project/.env.development.local': 'LOCAL_DEVELOPMENT_ENV_VAR=ok'
+      });
+
+      new DotenvFlow({
+        ...options,
+        node_env: 'development'
+      });
+
+      expect(console.debug)
+        .to.have.been.calledWithMatch(
+          /dotenv-flow-webpack\b.*registering.*definitions/
+        );
+
+      expect(console.debug)
+        .to.have.been.calledWithMatch(
+          /dotenv-flow\b.*>> process\.env\.%s/,
+          'DEFAULT_ENV_VAR'
+        );
+
+      expect(console.debug)
+        .to.have.been.calledWithMatch(
+          /dotenv-flow\b.*>> process\.env\.%s/,
+          'LOCAL_ENV_VAR'
+        );
+
+      expect(console.debug)
+        .to.have.been.calledWithMatch(
+          /dotenv-flow\b.*>> process\.env\.%s/,
+          'DEVELOPMENT_ENV_VAR'
+        );
+
+      expect(console.debug)
+        .to.have.been.calledWithMatch(
+          /dotenv-flow\b.*>> process\.env\.%s/,
+          'LOCAL_DEVELOPMENT_ENV_VAR'
+        );
+    });
+
+    it('prints out the completion status', () => {
+      new DotenvFlow(options);
+
+      expect(console.debug)
+        .to.have.been.calledWithMatch(
+          /dotenv-flow\b.*initialization completed/
+        );
+    });
+
+    describe('… and `options.node_env` is set to "test"', () => {
+      beforeEach('set `options.node_env` to "test"', () => {
+        options.node_env = 'test';
+      });
+
+      it('notifies that `.env.local` is being skipped in "test" environment', () => {
+        mockFS({
+          '/path/to/project/.env': 'DEFAULT_ENV_VAR=ok',
+          '/path/to/project/.env.local': 'LOCAL_ENV_VAR=ok',
+          '/path/to/project/.env.test': 'TEST_ENV_VAR=ok',
+          '/path/to/project/.env.test.local': 'LOCAL_TEST_ENV_VAR=ok'
+        });
+
+        new DotenvFlow(options);
+
+        expect(console.debug)
+          .to.have.been.calledWithMatch(
+            /dotenv-flow\b.*%s.*is being skipped for "test" environment/,
+            '.env.local'
+          );
+      });
+
+      it("doesn't spam about skipping `.env.local` if it doesn't exist", () => {
+        mockFS({
+          '/path/to/project/.env': 'DEFAULT_ENV_VAR=ok',
+          '/path/to/project/.env.test': 'TEST_ENV_VAR=ok',
+          '/path/to/project/.env.test.local': 'LOCAL_TEST_ENV_VAR=ok'
+        });
+
+        new DotenvFlow(options);
+
+        expect(console.debug)
+          .to.have.not.been.calledWithMatch(/dotenv-flow\b.*%s.*skipped/);
+      });
+    });
+
+    describe('… and `options.system_vars` is enabled', () => {
+      beforeEach('setup `options.system_vars`', () => {
+        options.system_vars = true;
+      });
+
+      it('informs that system environment variables are being registered', () => {
+        process.env.SYSTEM_ENV_VAR = 'predefined by the shell';
+
+        new DotenvFlow(options);
+
+        expect(console.debug)
+          .to.have.been.calledWithMatch(
+            /dotenv-flow-webpack\b.*registering system environment variables/
+          );
       })
 
-      it("doesn't print any warnings", () => {
-        process.env.DEFAULT_ENV_VAR = 'predefined by the shell';
-
+      it('informs when a `.env*` file-defined environment variable is overwritten by a system one', () => {
         mockFS({
           '/path/to/project/.env': 'DEFAULT_ENV_VAR="defined in `.env`"',
           '/path/to/project/.env.local': 'LOCAL_ENV_VAR="defined in `.env.local`"'
         });
 
+        process.env.DEFAULT_ENV_VAR = 'predefined by the shell';
+
         new DotenvFlow(options);
 
-        expect($consoleWarn)
-          .to.have.not.been.called;
+        expect(console.debug)
+          .to.have.been.calledWithMatch(
+            /dotenv-flow\b.*process\.env\.%s.*overwritten.*by.*system-defined environment variable.*%s/,
+            'DEFAULT_ENV_VAR',
+            'DEFAULT_ENV_VAR'
+          );
       });
     });
   });
