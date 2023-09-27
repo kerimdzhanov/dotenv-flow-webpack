@@ -885,37 +885,9 @@ describe('dotenv-flow-webpack', () => {
         .throws(new Error('`.env.local` file reading error stub'));
     });
 
-    let $consoleError;
-
-    beforeEach('stub `console.error`', () => {
-      $consoleError = sinon.stub(console, 'error');
-    });
-
-    afterEach(() => $consoleError.restore());
-
-    it('prints the occurred error via `console.error()`', () => {
-      new DotenvFlow();
-
-      expect($consoleError)
-        .to.have.been.calledWith(
-          'dotenv-flow-webpack:',
-          '`.env.local` file reading error stub'
-        );
-    });
-
-    describe('… and `options.silent` is enabled', () => {
-      let options;
-
-      beforeEach('setup `options.silent`', () => {
-        options = { silent: true };
-      });
-
-      it("doesn't print any errors", () => {
-        new DotenvFlow(options);
-
-        expect($consoleError)
-          .to.have.not.been.called;
-      });
+    it('throws the occurred error', () => {
+      expect(() => new DotenvFlow())
+        .to.throw('`.env.local` file reading error stub');
     });
   });
 });
