@@ -24,6 +24,7 @@
     "url": "https://github.com/kerimdzhanov/dotenv-flow-webpack/issues"
   },
   "main": "lib/dotenv-flow-webpack.js",
+  "types": "lib/dotenv-flow-webpack.d.ts",
   "files": [],
   "peerDependencies": {
     "webpack": "^1 || ^2 || ^3 || ^4 || ^5"
@@ -38,6 +39,7 @@
     "mocha": "^10.2.0",
     "sinon": "^16.0.0",
     "sinon-chai": "^3.7.0",
+    "typescript": "^5.5.4",
     "webpack": "^5.88.2"
   },
   "engines": {
@@ -45,6 +47,7 @@
   },
   "scripts": {
     "test": "mocha -r mocha.conf.js test/*.spec.js",
+    "generate-types": "tsc",
     "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s"
   },
   "author": "Dan Kerimdzhanov",
